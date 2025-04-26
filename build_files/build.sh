@@ -10,7 +10,34 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf5 install -y gnome-shell-extension-dash-to-dock
+dnf5 install -y gnome-shell-extension-appindicator
+# Apps    
+#- ghostty
+# - micro
+#dnf5 install -y starship
+dnf5 install -y zsh
+dnf5 install -y gnome-backgrounds-extras
+dnf5 install -y gnome-tweaks
+# taken from bluefin
+dnf5 install -y bash-color-prompt
+dnf5 install -y bootc
+dnf5 install -y borgbackup
+dnf5 install -y hplip
+dnf5 install -y lm_sensors
+# - nautilus-open-any-terminal
+dnf5 install -y oddjob-mkhomedir
+dnf5 install -y openssh-askpass
+dnf5 install -y powertop
+
+# Remove packages
+dnf5 remove -y firefox
+dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+dnf5 remove -y gnome-shell-extension-background-logo
+dnf5 remove -y ptyxis
+dnf5 remove -y nvtop
+dnf5 remove -y wireguard-tools
+dnf5 remove -y yubikey-manager
 
 # Use a COPR Example:
 #
