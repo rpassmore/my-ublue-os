@@ -9,13 +9,16 @@ set -ouex pipefail
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
+
+dnf5 copr enable ublue-os/packages
+dnf5 copr enable che/nerd-fonts
+dnf5 copr enable atim/starship
+
 # this installs a package from fedora repos
 dnf5 install -y gnome-shell-extension-dash-to-dock
 dnf5 install -y gnome-shell-extension-appindicator
 # Apps    
-#- ghostty
-# - micro
-#dnf5 install -y starship
+dnf5 install -y starship
 dnf5 install -y zsh
 dnf5 install -y gnome-backgrounds-extras
 dnf5 install -y gnome-tweaks
@@ -29,6 +32,7 @@ dnf5 install -y lm_sensors
 dnf5 install -y oddjob-mkhomedir
 dnf5 install -y openssh-askpass
 dnf5 install -y powertop
+dnf5 install -y uupd
 
 # Remove packages
 dnf5 remove -y firefox
@@ -46,6 +50,15 @@ dnf5 remove -y yubikey-manager
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
+
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
+# systemctl enable dconf-update.service
+systemctl enable flatpak-add-flathub-repo.service
+systemctl enable flatpak-replace-fedora-apps.service
+systemctl enable flatpak-cleanup.timer
+# systemctl enable rpm-ostreed-automatic.timer
+
+bootc container lint
+ostree container commit
