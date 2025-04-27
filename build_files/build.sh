@@ -27,7 +27,7 @@ dnf5 -y install \
     borgbackup \
     hplip \
     lm_sensors \
-    ddjob-mkhomedir \
+    oddjob-mkhomedir \
     openssh-askpass \
     powertop \
     uupd 
