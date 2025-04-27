@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # Copy System Files to Container
-rsync -rvK /ctx/system_files/shared/ /
+rsync -rvK /ctx/system_files/ /
 
 ### Install packages
 
@@ -50,7 +50,9 @@ dnf5 remove -y yubikey-manager
 # dnf5 -y install package
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
-
+dnf5 -y copr disable ublue-os/packages
+dnf5 -y copr disable che/nerd-fonts
+dnf5 -y copr enable atim/starship
 
 #### Example for enabling a System Unit File
 
