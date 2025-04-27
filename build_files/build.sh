@@ -10,35 +10,33 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 
-dnf5 copr enable ublue-os/packages
-dnf5 copr enable che/nerd-fonts
-dnf5 copr enable atim/starship
+dnf5 -y copr enable ublue-os/packages
+dnf5 -y copr enable che/nerd-fonts
+dnf5 -y copr enable atim/starship
 
 # this installs a package from fedora repos
-dnf5 install -y gnome-shell-extension-dash-to-dock
-dnf5 install -y gnome-shell-extension-appindicator
-# Apps    
-# dnf5 install -y starship
-dnf5 install -y zsh
-dnf5 install -y gnome-backgrounds-extras
-dnf5 install -y gnome-tweaks
-# taken from bluefin
-dnf5 install -y bash-color-prompt
-dnf5 install -y bootc
-dnf5 install -y borgbackup
-dnf5 install -y hplip
-dnf5 install -y lm_sensors
-# - nautilus-open-any-terminal
-dnf5 install -y oddjob-mkhomedir
-dnf5 install -y openssh-askpass
-dnf5 install -y powertop
-dnf5 install -y uupd
+dnf5 -y install \
+    gnome-shell-extension-dash-to-dock \
+    gnome-shell-extension-appindicator \
+    starship \
+    zsh \
+    gnome-backgrounds-extras \
+    gnome-tweaks \
+    bash-color-prompt \
+    bootc \
+    borgbackup \
+    hplip \
+    lm_sensors \
+    ddjob-mkhomedir \
+    openssh-askpass \
+    powertop \
+    uupd 
 
 # Remove packages
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y ptyxis
+# dnf5 remove -y ptyxis
 dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
