@@ -18,7 +18,7 @@ dnf5 copr enable atim/starship
 dnf5 install -y gnome-shell-extension-dash-to-dock
 dnf5 install -y gnome-shell-extension-appindicator
 # Apps    
-dnf5 install -y starship
+# dnf5 install -y starship
 dnf5 install -y zsh
 dnf5 install -y gnome-backgrounds-extras
 dnf5 install -y gnome-tweaks
