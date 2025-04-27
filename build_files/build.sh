@@ -2,6 +2,9 @@
 
 set -ouex pipefail
 
+# Copy System Files to Container
+rsync -rvK /ctx/system_files/shared/ /
+
 ### Install packages
 
 # Packages can be installed from any enabled yum repo on the image.
