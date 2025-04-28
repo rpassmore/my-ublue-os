@@ -99,7 +99,7 @@ jobs:
           # tags: ${{ steps.metadata.outputs.tags }}
           # labels: ${{ steps.metadata.outputs.labels }}
           # oci: false
-          image: oci:raw-img
+          image: localhost/raw-img
           # tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           oci: true
