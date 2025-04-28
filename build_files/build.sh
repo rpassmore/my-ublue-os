@@ -21,6 +21,7 @@ dnf5 -y copr enable atim/starship
 dnf5 -y install \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
+    gnome-shell-extension-caffeine \
     starship \
     zsh \
     gnome-backgrounds-extras \
@@ -39,7 +40,7 @@ dnf5 -y install \
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-# dnf5 remove -y ptyxis
+dnf5 remove -y ptyxis
 dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
