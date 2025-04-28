@@ -114,7 +114,7 @@ jobs:
         with:
           rechunk: 'ghcr.io/hhd-dev/rechunk:v1.2.1'
           #ref: "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-          ref: localhost/raw-img:latest
+          ref: oci:raw-img:latest
           prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
           skip_compression: true
           version: "latest_<date>"       
