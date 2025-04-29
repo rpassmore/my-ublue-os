@@ -6,7 +6,7 @@ on:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, nvidia-open, hwe]'"
         required: false
-        default: "['main']"
+        default: '["main"]'
         type: string
       brand_name:
         description: "The Brand Name: MyUblue"
@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
-        base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx"]
+        base_name: ["${{ inputs.brand_name }}"]
         stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
