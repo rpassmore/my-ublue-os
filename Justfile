@@ -1,7 +1,7 @@
 export repo_organization := env("GITHUB_REPOSITORY_OWNER", "yourname")
 export image_name := env("IMAGE_NAME", "yourimage")
 export centos_version := env("CENTOS_VERSION", "stream10")
-export fedora_version := env("CENTOS_VERSION", "41")
+export fedora_version := env("CENTOS_VERSION", "42")
 export default_tag := env("DEFAULT_TAG", "latest")
 export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
 
@@ -119,10 +119,10 @@ build $target_image=image_name $tag=default_tag $dx="0" $hwe="0" $gdx="0":
         BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=$(git rev-parse --short HEAD)")
     fi
 
-    podman build \
+    docker build \
         "${BUILD_ARGS[@]}" \
-        --pull=newer \
         --tag "${target_image}:${tag}" \
+        --file Containerfile \
         .
 
 # Command: _rootful_load_image
@@ -201,7 +201,7 @@ _build-bib $target_image $tag $type $config: (_rootful_load_image target_image t
       --rm \
       -it \
       --privileged \
-      --pull=newer \
+    #   --pull=newer \
       --net=host \
       --security-opt label=type:unconfined_t \
       -v $(pwd)/${config}:/config.toml:ro \
@@ -277,7 +277,7 @@ _run-vm $target_image $tag $type $config:
     # Set up the arguments for running the VM
     run_args=()
     run_args+=(--rm --privileged)
-    run_args+=(--pull=newer)
+    # run_args+=(--pull=newer)
     run_args+=(--publish "127.0.0.1:${port}:8006")
     run_args+=(--env "CPU_CORES=4")
     run_args+=(--env "RAM_SIZE=8G")
