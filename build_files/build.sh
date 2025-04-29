@@ -55,8 +55,11 @@ dnf5 -y copr disable ublue-os/packages
 dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr enable atim/starship
 
-#### Example for enabling a System Unit File
+# Swap flatpak repos
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-modify --no-filter --enable flathub
 
+#### Example for enabling a System Unit File
 systemctl enable podman.socket
 # systemctl enable dconf-update.service
 systemctl enable flatpak-add-flathub-repo.service
