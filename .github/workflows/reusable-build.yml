@@ -11,7 +11,7 @@ on:
       brand_name:
         description: "The Brand Name: MyUblue"
         required: false
-        default: MyUblue
+        default: myublue
         type: string
       stream_name:
         description: "The Fedora Version: stable, or latest"

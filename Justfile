@@ -2,8 +2,8 @@ repo_organization := "rpassmore"
 rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.1"
 iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
 images := '(
-    [aurora]=aurora
-    [aurora-dx]=aurora-dx
+    [myublue]=myublue
+    [my-ublue-os]=my-ublue-os
 )'
 flavors := '(
     [main]=main
