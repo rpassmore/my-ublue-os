@@ -40,7 +40,7 @@ dnf5 -y install \
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y ptyxis
+# dnf5 remove -y ptyxis
 dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
@@ -56,8 +56,8 @@ dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr enable atim/starship
 
 # Swap flatpak repos
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak remote-modify --no-filter --enable flathub
+# flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+# flatpak remote-modify --no-filter --enable flathub
 
 #### Example for enabling a System Unit File
 systemctl enable podman.socket
