@@ -80,7 +80,7 @@ validate $image $tag $flavor:
     if [[ "${tag}" == "stable-daily" ]]; then
         tag="stable"
     fi
-
+    echo ${image} ${tag} ${flavor}
     checkimage="${images[${image}]-}"
     checktag="${tags[${tag}]-}"
     checkflavor="${flavors[${flavor}]-}"
