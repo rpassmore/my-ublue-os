@@ -17,7 +17,7 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable che/nerd-fonts
 dnf5 -y copr enable atim/starship
 
-# install bew kernel
+# install new kernel & remove old one
 dnf5 -y copr enable bieszczaders/kernel-cachyos
 dnf5 -y remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
 dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched
