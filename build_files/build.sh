@@ -17,6 +17,12 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable che/nerd-fonts
 dnf5 -y copr enable atim/starship
 
+# install bew kernel
+dnf5 -y copr enable bieszczaders/kernel-cachyos
+dnf5 -y remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
+dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched
+dnf5 -y copr disable bieszczaders/kernel-cachyos        
+
 # this installs a package from fedora repos
 dnf5 -y install \
     gnome-shell-extension-dash-to-dock \
@@ -40,7 +46,6 @@ dnf5 -y install \
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-# dnf5 remove -y ptyxis
 dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
@@ -66,6 +71,3 @@ systemctl enable flatpak-add-flathub-repo.service
 systemctl enable flatpak-replace-fedora-apps.service
 systemctl enable flatpak-cleanup.timer
 # systemctl enable rpm-ostreed-automatic.timer
-
-bootc container lint
-ostree container commit
