@@ -19,9 +19,11 @@ dnf5 -y copr enable atim/starship
 
 # install new kernel & remove old one
 dnf5 -y copr enable bieszczaders/kernel-cachyos
+dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
 dnf5 -y remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
-dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched
-dnf5 -y copr disable bieszczaders/kernel-cachyos        
+dnf5 -y install kernel-cachyos kernel-cachyos-devel-matched scx-scheds
+dnf5 -y copr disable bieszczaders/kernel-cachyos
+dnf5 -y copr disable bieszczaders/kernel-cachyos-addons
 
 # this installs a package from fedora repos
 dnf5 -y install \
