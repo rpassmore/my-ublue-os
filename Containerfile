@@ -1,10 +1,8 @@
 
-
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
 COPY / /
 
-# Base Image6.12.5-204.bazzite.fc41.x86_64}
 FROM ghcr.io/ublue-os/silverblue-main:42
 
 ### MODIFICATIONS
@@ -16,7 +14,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build_files/build.sh && \
-    /ctx/build_files/cleanup.sh && \
+    # /ctx/build_files/cleanup.sh && \
     ostree container commit
     
 ### LINTING
