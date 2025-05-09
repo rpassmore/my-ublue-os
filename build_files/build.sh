@@ -40,7 +40,7 @@ dnf5 -y install \
     powertop \
     uupd \
     nerd-fonts
-    
+
 # Remove packages
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
@@ -59,7 +59,6 @@ dnf5 -y copr disable ublue-os/packages
 dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr disable atim/starship
 dnf5 -y config-manager setopt terra.enabled=0
-dnf5 -y config-manager setopt terra-extra.enabled=0
 
 # Swap flatpak repos
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
