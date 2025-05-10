@@ -115,8 +115,8 @@
         #   uses: hhd-dev/rechunk@f153348d8100c1f504dec435460a0d7baf11a9d2 # v1.1.1
         #   with:
         #     rechunk: 'ghcr.io/hhd-dev/rechunk:v1.0.1'
-        #     ref: "localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
-        #     prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}"
+        #     ref: "localhost/${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}"
+        #     prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}"
         #     skip_compression: true
         #     version: ${{ env.CENTOS_VERSION }}
         #     labels: ${{ steps.metadata.outputs.labels }} # Rechunk strips out all the labels during build, this needs to be reapplied here with newline separator
@@ -127,7 +127,7 @@
         #     IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
         #     sudo rm -rf ${{ steps.rechunk.outputs.output }}
         #     for tag in ${{ steps.metadata.outputs.tags }}; do
-        #       podman tag $IMAGE ${{ env.IMAGE_NAME }}:$tag
+        #       podman tag $IMAGE ${{ env.IMAGE_NAME }}-${{ matrix.image }}:$tag
         #     done
   
         # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
@@ -152,7 +152,7 @@
           id: image_case
           uses: ASzc/change-string-case-action@d0603cd0a7dd490be678164909f65c7737470a7f # v6
           with:
-            string: ${{ env.IMAGE_NAME }}
+            string: ${{ env.IMAGE_NAME }}-${{ matrix.image }}
   
         - name: Push To GHCR
           uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
