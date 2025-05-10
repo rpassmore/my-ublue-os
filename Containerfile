@@ -1,9 +1,11 @@
+ARG BASE_IMAGE=ghcr.io/ublue-os/silverblue-main:42
 
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
+
 COPY / /
 
-FROM ghcr.io/ublue-os/silverblue-main:42
+FROM ${BASE_IMAGE}
 
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the build.sh script

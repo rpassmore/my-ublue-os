@@ -33,6 +33,11 @@
         packages: write
         id-token: write
   
+      strategy:
+        fail-fast: false
+        matrix:
+          image: ["main", "nvidia"]
+
       steps:
         # These stage versions are pinned by https://github.com/renovatebot/renovate
         - name: Checkout
@@ -90,11 +95,13 @@
           id: build_image
           uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
           with:
+            build-args: |
+              BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:42
             containerfiles: |
               ./Containerfile
             # Postfix image name with -custom to make it a little more descriptive
             # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
-            image: ${{ env.IMAGE_NAME }}
+            image: ${{ env.IMAGE_NAME }}-${{ matrix.image }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}
             oci: false
