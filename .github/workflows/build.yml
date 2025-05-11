@@ -94,38 +94,28 @@
             sep-tags: " "
             sep-annotations: " "
   
-        - name: Build Image
-          id: build_image
-          uses: redhat-actions/buildah-build@v2 #@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
-          with:
-            build-args: |
-              BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }}
-            containerfiles: |
-              ./Containerfile
-            # Postfix image name with -custom to make it a little more descriptive
-            # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
-            image: ${{ env.IMAGE_NAME }}-${{ matrix.image }}
-            tags: ${{ steps.metadata.outputs.tags }}
-            labels: ${{ steps.metadata.outputs.labels }}
-            oci: false
+        # - name: Build Image
+        #   id: build_image
+        #   uses: redhat-actions/buildah-build@v2 #@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
+        #   with:
+        #     build-args: |
+        #       BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }}
+        #     containerfiles: |
+        #       ./Containerfile
+        #     # Postfix image name with -custom to make it a little more descriptive
+        #     # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
+        #     image: ${{ env.IMAGE_NAME }}-${{ matrix.image }}
+        #     tags: ${{ steps.metadata.outputs.tags }}
+        #     labels: ${{ steps.metadata.outputs.labels }}
+        #     oci: false
   
-        - name: Build image sudo
-          id: build_image_sudo
+        - name: Build image
+          id: build_image
           run: |
               sudo buildah build \
                 --build-arg BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }} \
                 --file ./Containerfile \
-                --tag ${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}
-
-        - name: List images
-          id: list_images
-          run: |
-              buildah info    
-              buildah images
-              sudo buildah images
-              podman images
-              sudo podman images
-              
+                --tag ${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}      
 
         # Rechunk is a script that we use on Universal Blue to make sure there isnt a single huge layer when your image gets published.
         # This does not make your image faster to download, just provides better resumability and fixes a few errors.
@@ -142,6 +132,15 @@
             version: ${{ env.DEFAULT_TAG }}
             labels: ${{ steps.metadata.outputs.labels }} # Rechunk strips out all the labels during build, this needs to be reapplied here with newline separator
   
+        - name: List images
+          id: list_images
+          run: |
+              buildah info    
+              buildah images
+              sudo buildah images
+              podman images
+              sudo podman images
+
         # This is necessary so that the podman socket can find the rechunked image on its storage
         - name: Load in podman and tag
           run: |
@@ -151,6 +150,16 @@
               podman tag $IMAGE ${{ env.IMAGE_NAME }}-${{ matrix.image }}:$tag
             done
   
+        - name: List images 2
+          id: list_images_2
+          run: |
+              buildah info    
+              buildah images
+              sudo buildah images
+              podman images
+              sudo podman images
+        
+
         # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
         # They also check if the runner is on the default branch so that things like the merge queue (if you enable it), are going to work
         - name: Login to GitHub Container Registry
