@@ -179,7 +179,6 @@
           run: |
             for tag in ${{ steps.metadata.outputs.tags }}; do
               sudo podman push \
-                # --creds ${{ github.actor }}:${{ github.token }} \
                 --compression-format zstd:chunked \
                 ${{ steps.registry_case.outputs.lowercase }}/${{ steps.image_case.outputs.lowercase }}:$tag
             done
