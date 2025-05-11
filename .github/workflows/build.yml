@@ -113,9 +113,9 @@
           id: build_image_sudo
           run: |
               sudo buildah build \
-                --build-args BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }} \
-                --containerfiles ./Containerfile \
-                ${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}
+                --build-arg BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }} \
+                --file ./Containerfile \
+                --tag ${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}
 
         - name: List images
           id: list_images
