@@ -180,7 +180,7 @@
             for tag in ${{ steps.metadata.outputs.tags }}; do
               sudo podman push \
                 --compression-format zstd:chunked \
-                ${{ steps.registry_case.outputs.lowercase }}/${{ steps.image_case.outputs.lowercase }}:$tag
+                localhost/${{ steps.image_case.outputs.lowercase }}:$tag ${{ steps.registry_case.outputs.lowercase }}/${{ steps.image_case.outputs.lowercase }}:$tag
             done
   
         # This section is optional and only needs to be enabled if you plan on distributing
