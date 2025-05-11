@@ -135,31 +135,24 @@
         - name: List images
           id: list_images
           run: |
-              buildah info    
-              buildah images
-              sudo buildah images
               podman images
               sudo podman images
 
         # This is necessary so that the podman socket can find the rechunked image on its storage
         - name: Load in podman and tag
           run: |
-            IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
+            IMAGE=$(sudo podman pull ${{ steps.rechunk.outputs.ref }})
             sudo rm -rf ${{ steps.rechunk.outputs.location }}
             for tag in ${{ steps.metadata.outputs.tags }}; do
-              podman tag $IMAGE ${{ env.IMAGE_NAME }}-${{ matrix.image }}:$tag
+              sudo podman tag $IMAGE ${{ env.IMAGE_NAME }}-${{ matrix.image }}:$tag
             done
   
         - name: List images 2
           id: list_images_2
           run: |
-              buildah info    
-              buildah images
-              sudo buildah images
               podman images
               sudo podman images
         
-
         # These `if` statements are so that pull requests for your custom images do not make it publish any packages under your name without you knowing
         # They also check if the runner is on the default branch so that things like the merge queue (if you enable it), are going to work
         - name: Login to GitHub Container Registry
