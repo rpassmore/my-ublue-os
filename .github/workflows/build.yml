@@ -131,12 +131,6 @@
             skip_compression: true
             version: ${{ env.DEFAULT_TAG }}
             labels: ${{ steps.metadata.outputs.labels }} # Rechunk strips out all the labels during build, this needs to be reapplied here with newline separator
-  
-        - name: List images
-          id: list_images
-          run: |
-              podman images
-              sudo podman images
 
         # This is necessary so that the podman socket can find the rechunked image on its storage
         - name: Load in podman and tag
@@ -147,8 +141,8 @@
               sudo podman tag $IMAGE ${{ env.IMAGE_NAME }}-${{ matrix.image }}:$tag
             done
   
-        - name: List images 2
-          id: list_images_2
+        - name: List images
+          id: list_images
           run: |
               podman images
               sudo podman images
@@ -182,15 +176,27 @@
           uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
           if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
           id: push
-          env:
-            REGISTRY_USER: ${{ github.actor }}
-            REGISTRY_PASSWORD: ${{ github.token }}
+          # env:
+          #   REGISTRY_USER: ${{ github.actor }}
+          #   REGISTRY_PASSWORD: ${{ github.token }}
           with:
             registry: ${{ steps.registry_case.outputs.lowercase }}
             image: ${{ steps.image_case.outputs.lowercase }}
             tags: ${{ steps.metadata.outputs.tags }}
-            username: ${{ env.REGISTRY_USER }}
-            password: ${{ env.REGISTRY_PASSWORD }}
+            # username: ${{ env.REGISTRY_USER }}
+            # password: ${{ env.REGISTRY_PASSWORD }}
+            extra-args: "--compression-format zstd:chunked"
+
+        # - name: Push To GHCR
+        #   if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        #   id: push
+        #   run: |
+        #     for tag in ${{ steps.metadata.outputs.tags }}; do
+        #       sudo podman push \
+        #         --creds ${{ github.actor }}:${{ github.token }} \
+        #         --compression-format zstd:chunked \
+        #         ${{ steps.registry_case.outputs.lowercase }}/${{ steps.image_case.outputs.lowercase }}:$tag
+        #     done
   
         # This section is optional and only needs to be enabled if you plan on distributing
         # your project for others to consume. You will need to create a public and private key
