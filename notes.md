@@ -6,3 +6,28 @@ https://github.com/daegalus/redfin/blob/main/build.sh
 
 # Systemd boot
 https://github.com/ostreedev/ostree/issues/1719#issuecomment-1749394763
+
+
+# Flatpacks
+Showtime
+Chrome
+Edge
+pika
+vscode
+steam
+heroic games launcher
+boxbuddy
+discord
+darktable
+warehouse
+flatseal
+folate
+headlamp
+github
+spotify
+clapgrep
+podman desktop
+meld
+extension manager
+slack
+handbreak
