@@ -39,7 +39,8 @@ dnf5 -y install \
     openssh-askpass \
     powertop \
     uupd \
-    nerd-fonts
+    nerd-fonts \
+    code
 
 # Remove packages
 dnf5 remove -y firefox
