@@ -32,8 +32,8 @@ dnf5 -y install \
     gnome-tweaks \
     bash-color-prompt \
     bootc \
-    borgbackup \
     hplip \
+    restic \
     lm_sensors \
     oddjob-mkhomedir \
     openssh-askpass \
