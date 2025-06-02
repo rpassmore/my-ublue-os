@@ -39,7 +39,8 @@ dnf5 -y install \
     openssh-askpass \
     powertop \
     uupd \
-    nerd-fonts
+    nerd-fonts \
+    code
 
 # Remove packages
 dnf5 remove -y firefox
@@ -49,18 +50,7 @@ dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
-dnf5 -y copr disable ublue-os/packages
-dnf5 -y copr disable che/nerd-fonts
-dnf5 -y copr disable atim/starship
-dnf5 -y config-manager setopt terra.enabled=0
-
-# Swap flatpak repos
+# Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 # flatpak remote-modify --no-filter --enable flathub
 
