@@ -10,12 +10,14 @@
     {
       "automerge": true,
       "autoApprove" : true,
+      "labels": ["dependencies"]
       "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"]
     },
     {
       "enabled": true,
       "autoApprove" : true,
       "automerge": true,
+      "labels": ["github_actions"]
       "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest", "pin"],
       "matchDepTypes": ["container"],
       "matchFileNames": [".github/workflows/**.yaml", ".github/workflows/**.yml"],
