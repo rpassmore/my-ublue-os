@@ -4,16 +4,21 @@
     "config:best-practices",
   ],
 
-  "rebaseWhen": "never",
+  "rebaseWhen": "auto",
 
   "packageRules": [
     {
       "automerge": true,
-      "matchUpdateTypes": ["pin", "pinDigest"]
+      "autoApprove" : true,
+      "labels": ["dependencies"]
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"]
     },
     {
-      "enabled": false,
-      "matchUpdateTypes": ["digest", "pinDigest", "pin"],
+      "enabled": true,
+      "autoApprove" : true,
+      "automerge": true,
+      "labels": ["github_actions"]
+      "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest", "pin"],
       "matchDepTypes": ["container"],
       "matchFileNames": [".github/workflows/**.yaml", ".github/workflows/**.yml"],
     },
