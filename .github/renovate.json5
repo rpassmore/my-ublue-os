@@ -14,12 +14,26 @@
       "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"]
     },
     {
+      "automerge": false,
+      "autoApprove" : false,
+      "labels": ["major"],
+      "matchUpdateTypes": ["major"]
+    },
+    {
       "enabled": true,
       "autoApprove" : true,
       "automerge": true,
       "labels": ["github_actions"],
       "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest", "pin"],
       "matchDepTypes": ["container"],
+      "matchFileNames": [".github/workflows/**.yaml", ".github/workflows/**.yml"],
+    },
+    {
+      "enabled": true,
+      "autoApprove" : false,
+      "automerge": false,
+      "labels": ["major"],
+      "matchUpdateTypes": ["major"],
       "matchFileNames": [".github/workflows/**.yaml", ".github/workflows/**.yml"],
     },
   ]
