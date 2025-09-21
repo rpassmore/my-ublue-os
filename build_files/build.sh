@@ -44,7 +44,9 @@ dnf5 -y install \
     podman-bootc \
     podman-compose \
     podman-machine \
-    podman-tui
+    podman-tui \
+    bazaar \
+    google-noto-fonts-all
 
 # Install Oh My Posh (there is no pagage for this yet)
 curl -s https://ohmyposh.dev/install.sh | bash -s    
@@ -53,9 +55,9 @@ curl -s https://ohmyposh.dev/install.sh | bash -s
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y nvtop
 dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
+dnf5 remove -y gnome-software
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
