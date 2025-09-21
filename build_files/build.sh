@@ -41,10 +41,6 @@ dnf5 -y install \
     uupd \
     nerd-fonts \
     code \
-    podman-bootc \
-    podman-compose \
-    podman-machine \
-    podman-tui \
     bazaar \
     google-noto-fonts-all
 
