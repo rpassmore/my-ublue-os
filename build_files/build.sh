@@ -45,7 +45,7 @@ dnf5 -y install \
     google-noto-fonts-all
 
 # Install Oh My Posh (there is no pagage for this yet)
-curl -s https://ohmyposh.dev/install.sh | bash -s    
+#curl -s https://ohmyposh.dev/install.sh | bash -s 
 
 # Remove packages
 dnf5 remove -y firefox
