@@ -11,7 +11,7 @@
       "automerge": true,
       "autoApprove" : true,
       "labels": ["dependencies"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest"]
+      "matchUpdateTypes": ["minor", "patch", "pin"]
     },
     {
       "automerge": false,
