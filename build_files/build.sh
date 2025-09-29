@@ -16,7 +16,7 @@ rsync -rvK /ctx/system_files/ /
 dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable che/nerd-fonts
 dnf5 -y copr enable atim/starship
-dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
+dnf5 -y install --nogpgcheck --repofrompath 'terra-rp,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
 dnf5 -y config-manager setopt "*terra*".priority=3 "*terra*".exclude="nerd-fonts topgrade"
 dnf5 -y config-manager setopt "terra-mesa".enabled=true
 dnf5 -y config-manager setopt "terra-nvidia".enabled=false
@@ -40,20 +40,76 @@ dnf5 -y install \
     powertop \
     uupd \
     nerd-fonts \
-    code \
     bazaar \
-    google-noto-fonts-all
+    google-noto-fonts-all \
+    plymouth-system-theme
 
-# Install Oh My Posh (there is no pagage for this yet)
-#curl -s https://ohmyposh.dev/install.sh | bash -s 
+# Install packages from Bluefin DX that we want
+#umoci
+dnf5 -y copr enable ganto/umoci
+#ublue-os staging
+dnf5 -y copr enable ublue-os/staging
+#ublue-os packages
+dnf5 -y copr enable ublue-os/packages
+#karmab-kcli
+dnf5 -y copr enable karmab/kcli
+# Fonts
+dnf5 -y copr enable atim/ubuntu-fonts
+# Kvmfr module
+dnf5 -y copr enable hikariknight/looking-glass-kvmfr
+# Podman-bootc
+dnf5 -y copr enable gmaglione/podman-bootc
 
-# Remove packages
+
+# Remove base packages
 dnf5 remove -y firefox
 dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y wireguard-tools
 dnf5 remove -y yubikey-manager
 dnf5 remove -y gnome-software
+
+
+# Remove packages from Bluefin
+dnf5 remove -y \
+    borgbackup \
+    fish \
+    bluefin-backgrounds \
+    bluefin-cli-logos \
+    bluefin-plymouth \
+    gnome-shell-extension-tailscale-gnome-qs \
+    tailscale
+
+
+    #docker-buildx-plugin \
+    #docker-ce \
+    #docker-ce-cli \
+    #docker-compose-plugin \
+    #docker-model-plugin \
+
+dnf5 -y install \
+    code \
+    genisoimage \
+    google-droid-sans-mono-fonts \
+    google-go-mono-fonts \
+    ibm-plex-mono-fonts \
+    iotop \
+    p7zip \
+    p7zip-plugins \
+    podmansh \
+    powerline-fonts \
+    sysprof \
+    tiptop \
+    ubuntu-family-fonts
+#podman-bootc \
+#podman-compose \
+#podman-machine \
+#    rocm-hip \
+#     rocm-opencl \
+#     rocm-smi \
+# Install Oh My Posh (there is no pagage for this yet)
+#curl -s https://ohmyposh.dev/install.sh | bash -s 
+
+dnf -y swap bluefin-logos fedora-logos
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

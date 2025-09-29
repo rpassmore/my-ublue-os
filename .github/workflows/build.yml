@@ -19,7 +19,6 @@
     IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
     ARTIFACTHUB_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4"  # You should put your own image here so that you get a fancy profile image on https://artifacthub.io/!
     DEFAULT_TAG: latest
-    FEDORA_VERSION: 42
   
   concurrency:
     group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
@@ -38,7 +37,18 @@
       strategy:
         fail-fast: false
         matrix:
-          image: ["main", "nvidia"]
+          image: ["silverblue-main", "silverblue-nvidia", "bluefin", "bluefin-nvidia"]
+          baseVersion: ["42", "stable"]
+          exclude:
+            - image: silverblue-main
+              baseVersion: stable
+            - image: silverblue-nvidia
+              baseVersion: stable
+            - image: bluefin
+              baseVersion: 42
+            - image: bluefin-nvidia
+              baseVersion: 42
+
 
       steps:
         # These stage versions are pinned by https://github.com/renovatebot/renovate
@@ -69,7 +79,7 @@
             # This generates all the tags for your image, you can add custom tags here too!
             # By default, it should generate "latest" and "latest.(date here)".
             tags: |
-              type=raw,value=${{ env.FEDORA_VERSION }}
+              type=raw,value=${{ matrix.baseVersion }}
               type=raw,value=latest
               type=raw,value=latest.{{date 'YYYYMMDD'}}
               type=raw,value={{date 'YYYYMMDD'}}
@@ -99,7 +109,7 @@
           id: build_image
           run: |
               sudo buildah build \
-                --build-arg BASE_IMAGE=ghcr.io/ublue-os/silverblue-${{ matrix.image }}:${{ env.FEDORA_VERSION }} \
+                --build-arg BASE_IMAGE=ghcr.io/ublue-os/${{ matrix.image }}:${{ matrix.baseVersion }} \
                 --file ./Containerfile \
                 --tag ${{ env.IMAGE_NAME }}-${{ matrix.image }}:${{ env.DEFAULT_TAG }}      
 
