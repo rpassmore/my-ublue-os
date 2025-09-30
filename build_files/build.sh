@@ -41,10 +41,19 @@ dnf5 -y install \
     uupd \
     nerd-fonts \
     bazaar \
-    google-noto-fonts-all \
-    plymouth-system-theme
+    google-noto-fonts-all
 
-# Install packages from Bluefin DX that we want
+# Remove base packages
+dnf5 remove -y \
+    firefox \
+    firefox-langpacks \
+    gnome-shell-extension-background-logo \
+    yubikey-manager \
+    gnome-software
+
+########################################################
+# Add & remove package from bluefin
+# Setup repos for packages from Bluefin DX that we want
 #umoci
 dnf5 -y copr enable ganto/umoci
 #ublue-os staging
@@ -60,15 +69,6 @@ dnf5 -y copr enable hikariknight/looking-glass-kvmfr
 # Podman-bootc
 dnf5 -y copr enable gmaglione/podman-bootc
 
-
-# Remove base packages
-dnf5 remove -y firefox
-dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y yubikey-manager
-dnf5 remove -y gnome-software
-
-
 # Remove packages from Bluefin
 dnf5 remove -y \
     borgbackup \
@@ -76,15 +76,15 @@ dnf5 remove -y \
     bluefin-backgrounds \
     bluefin-cli-logos \
     bluefin-plymouth \
+    bluefin-schemas \
+    bluefin-fastfetch \
+    bluefin-logos \
     gnome-shell-extension-tailscale-gnome-qs \
+    gnome-shell-extension-gsconnect \
+    nautilus-gsconnect \
+    python3-pygit2 \
     tailscale
 
-
-    #docker-buildx-plugin \
-    #docker-ce \
-    #docker-ce-cli \
-    #docker-compose-plugin \
-    #docker-model-plugin \
 
 dnf5 -y install \
     code \
@@ -99,7 +99,14 @@ dnf5 -y install \
     powerline-fonts \
     sysprof \
     tiptop \
-    ubuntu-family-fonts
+    ubuntu-family-fonts \
+    fedora-logos \
+    plymouth-system-theme
+    #docker-buildx-plugin \
+    #docker-ce \
+    #docker-ce-cli \
+    #docker-compose-plugin \
+    #docker-model-plugin \
 #podman-bootc \
 #podman-compose \
 #podman-machine \
