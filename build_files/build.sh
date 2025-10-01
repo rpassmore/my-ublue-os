@@ -79,13 +79,10 @@ dnf5 remove -y \
     bluefin-plymouth \
     bluefin-schemas \
     bluefin-fastfetch \
-    bluefin-logos \
     gnome-shell-extension-tailscale-gnome-qs \
     gnome-shell-extension-gsconnect \
     nautilus-gsconnect \
-    python3-pygit2 \
     tailscale
-
 
 dnf5 -y install \
     code \
@@ -117,7 +114,7 @@ dnf5 -y install \
 # Install Oh My Posh (there is no pagage for this yet)
 #curl -s https://ohmyposh.dev/install.sh | bash -s 
 
-dnf -y swap bluefin-logos fedora-logos
+dnf5 -y swap bluefin-logos fedora-logos
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
