@@ -23,6 +23,7 @@ dnf5 -y config-manager setopt "terra-nvidia".enabled=false
     
 # this installs a package from fedora repos
 dnf5 -y install \
+    code \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
     gnome-shell-extension-caffeine \
