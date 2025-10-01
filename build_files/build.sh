@@ -98,7 +98,6 @@ dnf5 -y install \
     sysprof \
     tiptop \
     ubuntu-family-fonts \
-    fedora-logos \
     plymouth-system-theme
     #docker-buildx-plugin \
     #docker-ce \
@@ -115,6 +114,7 @@ dnf5 -y install \
 #curl -s https://ohmyposh.dev/install.sh | bash -s 
 
 dnf5 -y swap bluefin-logos fedora-logos
+dnf5 -y swap bluefin-logos system-logos
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
