@@ -16,44 +16,86 @@ rsync -rvK /ctx/system_files/ /
 dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable che/nerd-fonts
 dnf5 -y copr enable atim/starship
-dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
-dnf5 -y config-manager setopt "*terra*".priority=3 "*terra*".exclude="nerd-fonts topgrade"
-dnf5 -y config-manager setopt "terra-mesa".enabled=true
-dnf5 -y config-manager setopt "terra-nvidia".enabled=false
-    
+
+# Setup repos for packages from Bluefin DX that we want
+dnf5 -y copr enable ganto/umoci
+dnf5 -y copr enable ublue-os/staging
+dnf5 -y copr enable ublue-os/packages
+dnf5 -y copr enable karmab/kcli
+dnf5 -y copr enable atim/ubuntu-fonts
+dnf5 -y copr enable hikariknight/looking-glass-kvmfr
+dnf5 -y copr enable gmaglione/podman-bootc
+
 # this installs a package from fedora repos
 dnf5 -y install \
+    bazaar \
+    bash-color-prompt \
+    bootc \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
     gnome-shell-extension-caffeine \
-    starship \
-    zsh \
+    gnome-shell-extension-search-light \
+    gnome-shell-extension-blur-my-shell \
     gnome-backgrounds-extras \
     gnome-tweaks \
-    bash-color-prompt \
-    bootc \
+    starship \
     hplip \
-    restic \
     lm_sensors \
     oddjob-mkhomedir \
     openssh-askpass \
     powertop \
     uupd \
     nerd-fonts \
+    google-noto-fonts-all \
+    restic \
+    switcheroo-control \
+    waypipe \
+    wireguard-tools \
+    zsh
+
+# Add packages from that are included in the bluefin dx version
+dnf5 -y install \
     code \
-    bazaar \
-    google-noto-fonts-all
+    genisoimage \
+    git-credential-libsecret \
+    git \
+    google-droid-sans-mono-fonts \
+    google-go-mono-fonts \
+    ibm-plex-mono-fonts \
+    iotop \
+    p7zip \
+    p7zip-plugins \
+    podmansh \
+    powerline-fonts \
+    sysprof \
+    tiptop \
+    ubuntu-family-fonts \
+    osbuild-selinux \
+    podman-bootc \
+    podman-compose
+    #podman-machine
+    #docker-buildx-plugin \
+    #docker-ce \
+    #docker-ce-cli \
+    #docker-compose-plugin \
+    #docker-model-plugin \
+    #rocm-hip \
+    #rocm-opencl \
+    #rocm-smi \
 
 # Install Oh My Posh (there is no pagage for this yet)
 #curl -s https://ohmyposh.dev/install.sh | bash -s 
 
 # Remove packages
-dnf5 remove -y firefox
-dnf5 remove -y firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-dnf5 remove -y gnome-shell-extension-background-logo
-dnf5 remove -y wireguard-tools
-dnf5 remove -y yubikey-manager
-dnf5 remove -y gnome-software
+dnf5 remove -y \
+    firefox \
+    firefox-langpacks \
+    gnome-software \
+    gnome-extensions-app \
+    gnome-shell-extension-background-logo \
+    gnome-software-rpm-ostree \
+    gnome-terminal-nautilus \
+    yubikey-manager
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

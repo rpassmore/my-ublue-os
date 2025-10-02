@@ -5,7 +5,16 @@ set -eoux pipefail
 dnf5 -y copr disable ublue-os/packages
 dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr disable atim/starship
-dnf5 -y config-manager setopt terra.enabled=0
+#dnf5 -y config-manager setopt terra.enabled=0
+
+# DX repos
+dnf5 -y copr disable ganto/umoci
+dnf5 -y copr disable ublue-os/staging
+dnf5 -y copr disable ublue-os/packages
+dnf5 -y copr disable karmab/kcli
+dnf5 -y copr disable atim/ubuntu-fonts
+dnf5 -y copr disable hikariknight/looking-glass-kvmfr
+dnf5 -y copr disable gmaglione/podman-bootc
 
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/vscode.repo
 
