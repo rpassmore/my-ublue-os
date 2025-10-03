@@ -21,7 +21,7 @@ ptyxis-transparency opacity="0.95":
 
 # Install system flatpaks for rebasers
 [group('System')]
-install-system-flatpaks $dx="dynamic":
+install-system-flatpaks:
     #!/usr/bin/bash
     flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
     xargs flatpak --system -y install --or-update < app/com.valvesoftware.Steam/x86_64/stable \
@@ -86,3 +86,9 @@ install-jetbrains-toolbox:
     mv jetbrains-toolbox-"${BUILD_VERSION}"/* $HOME/.local/share/JetBrains/ToolboxApp/
     echo "Launching JetBrains Toolbox"
     $HOME/.local/share/JetBrains/ToolboxApp/bin/jetbrains-toolbox
+
+[group('Apps')]
+install-oh-my-posh:
+    #!/usr/bin/env bash
+    # Install Oh My Posh (there is no package for this yet)
+    curl -s https://ohmyposh.dev/install.sh | bash -s

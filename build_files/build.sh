@@ -83,9 +83,6 @@ dnf5 -y install \
     #rocm-opencl \
     #rocm-smi \
 
-# Install Oh My Posh (there is no pagage for this yet)
-#curl -s https://ohmyposh.dev/install.sh | bash -s 
-
 # Remove packages
 dnf5 remove -y \
     firefox \
