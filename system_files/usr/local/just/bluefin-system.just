@@ -1,4 +1,9 @@
-# A very cut doen copy fo the Bluefin system.just file
+# A very cut down copy fo the Bluefin system.just file
+just := just_executable()
+
+[private]
+default:
+    @{{ just }} -f ./bluefin-system.just --list
 
 # Ptyxis terminal transparency
 [group('System')]
@@ -24,25 +29,24 @@ ptyxis-transparency opacity="0.95":
 install-system-flatpaks:
     #!/usr/bin/bash
     flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
-    xargs flatpak --system -y install --or-update < app/com.valvesoftware.Steam/x86_64/stable \
-                                                    app/com.heroicgameslauncher.hgl/x86_64/stable \
-                                                    app/net.lutris.Lutris/x86_64/stable \
+    flatpak --system -y install --or-update flathub \
                                                     com.valvesoftware.Steam \
+                                                    com.heroicgameslauncher.hgl \
                                                     com.valvesoftware.Steam.CompatibilityTool.Proton-GE \
-                                                    app/de.leopoldluley.Clapgrep \
-                                                    app/io.podman_desktop.PodmanDesktop \
-                                                    app/com.github.tchx84.Flatseal \
-                                                    app/com.mattjakeman.ExtensionManager \
-                                                    app/com.ranfdev.DistroShelf \
-                                                    app/io.github.flattool.Ignition \
-                                                    app/io.github.flattool.Warehouse \
-                                                    app/org.gnome.FileRoller \
-                                                    app/org.gnome.Firmware \
-                                                    app/org.gnome.Logs \
-                                                    app/org.gnome.Loupe \
-                                                    app/org.gnome.NautilusPreviewer \
-                                                    app/org.gnome.SimpleScan \
-                                                    app/org.gnome.baobab \
+                                                    de.leopoldluley.Clapgrep \
+                                                    io.podman_desktop.PodmanDesktop \
+                                                    com.github.tchx84.Flatseal \
+                                                    com.mattjakeman.ExtensionManager \
+                                                    com.ranfdev.DistroShelf \
+                                                    io.github.flattool.Ignition \
+                                                    io.github.flattool.Warehouse \
+                                                    org.gnome.FileRoller \
+                                                    org.gnome.Firmware \
+                                                    org.gnome.Logs \
+                                                    org.gnome.Loupe \
+                                                    org.gnome.NautilusPreviewer \
+                                                    org.gnome.SimpleScan \
+                                                    org.gnome.baobab \
                                                     org.gnome.DejaDup \
                                                     org.gimp.GIMP \
                                                     org.darktable.Darktable \
@@ -59,7 +63,8 @@ install-system-flatpaks:
                                                     com.github.unrud.VideoDownloader \
                                                     com.github.johnfactotum.Foliate \
                                                     com.discordapp.Discord \
-                                                    org.videolan.VLC
+                                                    org.videolan.VLC \
+                                                    org.gnome.Showtime
 
 # alias for install-jetbrains-toolbox
 [group('Apps')]
