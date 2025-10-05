@@ -31,6 +31,7 @@ dnf5 -y install \
     bazaar \
     bash-color-prompt \
     bootc \
+    fastfetch \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
     gnome-shell-extension-caffeine \
