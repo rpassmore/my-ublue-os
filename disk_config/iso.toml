@@ -2,7 +2,7 @@
 contents = """
 graphical
 %post
-bootc switch --mutate-in-place --transport registry ghcr.io/rpassmore/my-ublue-os:latest
+bootc switch --mutate-in-place --transport registry ghcr.io/rpassmore/my-ublue-os-main:latest
 %end
 """
 
