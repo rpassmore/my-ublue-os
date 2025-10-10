@@ -101,7 +101,7 @@ dnf5 remove -y \
     yubikey-manager
 
 # Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
-#mkdir -p /usr/local/bin
+mkdir -p /usr/local/bin
 curl -L -o /usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
 chmod +x /usr/local/bin/macadam
 
