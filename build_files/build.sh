@@ -69,13 +69,16 @@ dnf5 -y install \
     powerline-fonts \
     sysprof \
     tiptop \
-    ubuntu-family-fonts \
+    ubuntu-family-fonts
+
+# Install tooling needed to develop bootc containers locally
+dnf5 -y install \
     osbuild-selinux \
     podman-bootc \
     podman-compose \
     podmansh \
-    podman-machine
-    #podman-machine needed for podman-bootc extension (macadam)
+    gvisor-tap-vsock
+    #podman-machine
 
     #docker-buildx-plugin \
     #docker-ce \
@@ -96,6 +99,11 @@ dnf5 remove -y \
     gnome-software-rpm-ostree \
     gnome-terminal-nautilus \
     yubikey-manager
+
+# Install macadam it is needed by the podman-desktop-bootc extension, but is not packaged by fedora yet.
+mkdir -p /usr/local/bin
+curl -L -o /usr/local/bin/macadam https://github.com/crc-org/macadam/releases/download/v0.2.0/macadam-linux-amd64
+chmod +x /usr/local/bin/macadam
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
