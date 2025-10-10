@@ -1,274 +1,148 @@
-# image-template
+# my-ublue-os
+
+A customised Universal Blue (uBlue) bootc image for Fedora Atomic systems, with batteries-included defaults and tooling to build, sign, and distribute both OCI images and bootable ISOs.
+
+This repository started from the official uBlue image-template and has been tailored with my preferred packages, systemd services, and workflows. It is suitable as a starting point for your own image too.
+
+- Base technology: bootc + Fedora Atomic/Silverblue
+- Build targets: OCI image (GHCR) and bootable ISO
+- Tooling: Justfile, Podman, bootc-image-builder, GitHub Actions, cosign signing
+
+Contents
+- What you get
+- Quick start
+- Customize the image
+- Build locally
+- Build ISOs
+- GitHub Actions and secrets
+- Signing and verification (cosign)
+- Repo layout
+- Troubleshooting
+- Community and examples
+- License
+
+What you get
+- Preconfigured package set for a developer-friendly desktop
+  - Notable additions: starship, fastfetch, podman-bootc, VS Code, fonts (nerd-fonts, Ubuntu, IBM Plex Mono, Droid Mono), utilities (sysprof, iotop, tiptop, p7zip), WireGuard tools
+  - Removals: Firefox, GNOME Software and related extras, YubiKey Manager, etc.
+- System services enabled out of the box
+  - podman.socket
+  - Flatpak helpers: add Flathub, replace Fedora apps, periodic cleanup
+- Ready-to-use build recipes
+  - Containerfile for the image
+  - Justfile tasks to build/run VM images and ISOs
+  - disk_config/ for ISO configuration
+  - GitHub Actions workflows for image and ISO builds
+
+Quick start
+1) Fork or use this repo as a template
+- Update names in Justfile variables if desired (repo_organization, image_name, default_tag).
+- Optionally change image metadata in Containerfile and image.toml.
+
+2) Build the OCI image locally (Podman)
+- podman build -t ghcr.io/<your-gh-username>/<image-name>:<tag> -f Containerfile .
+- Example tag scheme: latest or lts.
+
+3) Boot onto the image with bootc (advanced)
+- See bootc docs: https://bootc-dev.github.io/bootc/
+
+4) Enable GitHub Actions
+- Push your repo to GitHub.
+- In GitHub → Actions, enable workflows. The image will publish to GHCR by default.
+
+Customize the image
+- Containerfile: Base image and layering
+  - Switch base to any uBlue image (Aurora, Bluefin, Bazzite, uCore) or to Fedora/CentOS bootc images.
+- build_files/build.sh: Package selection and services
+  - Installs packages from Fedora and COPR repos and enables systemd units. This is the primary place to add/remove packages.
+  - Notable COPR repos already enabled: ublue-os/packages, atim/starship, che/nerd-fonts, karmab/kcli, gmaglione/podman-bootc, etc.
+- system_files/: Files copied into the image at build time
+  - Systemd units for Flatpak management
+  - Repository definitions (e.g., docker-ce.repo, vscode.repo)
+- image.toml: Image metadata for bootc
+- disk_config/: bootc-image-builder config for ISOs
+
+Build locally
+- Requirements
+  - Podman (or Docker with compatible flags), just (optional but recommended), and sufficient disk space.
+- Useful Justfile commands
+  - just build <target_image> <tag> [dx] [hwe] [gdx]
+    - Builds the OCI image. target_image defaults to aurora; tag defaults to lts; feature flags are optional.
+  - VM/ISO images
+    - just build-qcow2 <target_image> <tag>
+    - just build-raw <target_image> <tag>
+    - just build-iso <target_image> <tag>
+    - just run-vm-qcow2 <target_image> <tag>
+    - just run-vm-raw <target_image> <tag>
+    - just run-vm-iso <target_image> <tag>
+    - just spawn-vm rebuild="0" type="qcow2" ram="6G"
+  - Maintenance
+    - just clean, just lint, just format, just check, just fix
+
+Build ISOs
+- Configure image reference in disk_config/iso.toml
+  - Set the image to your GHCR reference (e.g., ghcr.io/<org>/<image>:<tag>).
+- Build locally via Justfile
+  - just build-iso <target_image> <tag>
+- Or via GitHub Actions (build-iso.yml)
+  - Add S3 credentials if you want artifacts uploaded to your bucket via rclone.
+    - Required secrets: S3_PROVIDER, S3_BUCKET_NAME, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_REGION (or auto), S3_ENDPOINT.
+  - Otherwise, download the ISO from the workflow run artifacts.
+
+GitHub Actions and secrets
+- Image build and publish (build.yml)
+  - Publishes to ghcr.io/<owner>/<repo> using the repo name by default.
+- ISO build (build-iso.yml)
+  - Uses bootc-image-builder to create an ISO from your published OCI image.
+- Required secrets (recommended)
+  - SIGNING_SECRET: Contents of cosign.key (see Signing and verification)
+  - Optional: S3_* variables if uploading ISOs
+
+Signing and verification (cosign)
+- Install cosign: https://edu.chainguard.dev/open-source/sigstore/cosign/how-to-install-cosign/
+- Generate keys (no passphrase for GitHub Actions):
+  - cosign generate-key-pair
+- Add private key to GitHub as Actions secret SIGNING_SECRET
+  - gh secret set SIGNING_SECRET < cosign.key
+- Commit only cosign.pub to the repository root
+  - Important: Do NOT commit cosign.key. If it has been committed in your fork, rotate and remove it immediately (git history rewrite may be required).
+- Verify signatures
+  - cosign verify ghcr.io/<org>/<image>:<tag> \
+      --key cosign.pub
+
+Repo layout
+- Containerfile: Image build recipe
+- Justfile: High-level build tasks and helpers
+- build_files/build.sh: Package install/remove and service enablement
+- build_files/cleanup.sh: Finalization/cleanup script
+- system_files/: Files copied into the image (systemd units, repos, config)
+  - systemd units:
+    - usr/lib/systemd/system/flatpak-add-flathub-repo.service
+    - usr/lib/systemd/system/flatpak-replace-fedora-apps.service
+    - usr/lib/systemd/system/flatpak-cleanup.service
+    - usr/lib/systemd/system/flatpak-cleanup.timer
+  - dracut config: usr/lib/dracut/dracut.conf.d/10-compression.conf
+  - repo files: etc/yum.repos.d/*.repo (docker-ce, vscode)
+  - distrobox config: etc/distrobox/distrobox.ini
+- disk_config/
+  - iso.toml and disk.toml for bootc-image-builder
+- image.toml: Image metadata
+- artifacthub-repo.yml: Artifact Hub publisher metadata
+- LICENSE: Project license
+
+Troubleshooting
+- ISO build fails with missing image
+  - Ensure your OCI image is published to GHCR and iso.toml references the correct tag.
+- cosign fails or build.yml fails signing step
+  - Make sure SIGNING_SECRET is set and corresponds to the cosign.pub in the repo.
+- Podman errors during build
+  - Run just clean and try again. Ensure network access to COPR and Fedora repos.
+
+Community and examples
+- bootc discussions: https://github.com/bootc-dev/bootc/discussions
+- Artifact Hub guide: https://universal-blue.discourse.group/t/listing-your-custom-image-on-artifacthub/6446
+- Example projects
+  - m2os: https://github.com/m2giles/m2os
+  - bos: https://github.com/bsherman/bos
+  - homer: https://github.com/bketelsen/homer/
 
-# Purpose
-
-This repository is meant to be a template for building your own custom Universal Blue image. This template is the recommended way to make customizations to any image published by the Universal Blue Project:
-- [Aurora](https://getaurora.dev/)
-- [Bazzite](https://bazzite.gg/)
-- [Bluefin](https://projectbluefin.io/)
-- [uCore](https://projectucore.io/)
-- [main](https://github.com/ublue-os/main/)
-- [hwe](https://github.com/ublue-os/hwe/)
-
-or any other base image if you want to start from scratch:
-
-- Fedora: `quay.io/fedora/fedora-bootc:41`
-- CentOS Stream 9: `quay.io/centos-bootc/centos-bootc:stream9`
-- CentOS Stream 10 (in development): `quay.io/centos-bootc/centos-bootc:stream10`
-
-This template includes a Containerfile and a Github workflow for building the container image, signing, and proper metadata to be listed on [artifacthub](https://artifacthub.io/). As soon as the workflow is enabled in your repository, it will build the container image and push it to the Github Container Registry.
-
-# Prerequisites
-
-Working knowledge in the following topics:
-
-- Containers
-  - https://www.youtube.com/watch?v=SnSH8Ht3MIc
-  - https://www.mankier.com/5/Containerfile
-- bootc
-  - https://bootc-dev.github.io/bootc/
-- Fedora Silverblue (and other Fedora Atomic variants)
-  - https://docs.fedoraproject.org/en-US/fedora-silverblue/
-- Github Workflows
-  - https://docs.github.com/en/actions/using-workflows
-
-# How to Use
-
-## Template
-
-Select `Use this Template` and create a new repository from it. To enable the workflows, you may need to go the `Actions` tab of the new repository and click to enable workflows.
-
-## Containerfile
-
-This file defines the operations used to customize the selected image. It contains examples of possible modifications, including how to:
-- change the upstream from which the custom image is derived
-- add additional RPM packages
-- add binaries as a layer from other images
-
-## Building an ISO
-
-This template provides an out of the box workflow for getting an ISO image for your custom OCI image which can be used to directly install onto your machines.
-
-This template provides a way to upload the ISO that is generated from the workflow to a S3 bucket or it will be available as an artifact from the job. To upload to S3 we use a tool called [rclone](https://rclone.org/) which is able to use [many S3 providers](https://rclone.org/s3/). For more details on how to configure this see the details [below](#build-isoyml).
-
-### Justfile Documentation
-
-This `Justfile` contains various commands and configurations for building and managing container images and virtual machine images using Podman and other utilities.
-
-#### Environment Variables
-
-- `repo_organization`: The GitHub repository owner (default: "yourname").
-- `image_name`: The name of the image (default: "yourimage").
-- `centos_version`: The CentOS version (default: "stream10").
-- `fedora_version`: The Fedora version (default: "41").
-- `default_tag`: The default tag for the image (default: "latest").
-- `bib_image`: The Bootc Image Builder (BIB) image (default: "quay.io/centos-bootc/bootc-image-builder:latest").
-
-#### Aliases
-
-- `build-vm`: Alias for `build-qcow2`.
-- `rebuild-vm`: Alias for `rebuild-qcow2`.
-- `run-vm`: Alias for `run-vm-qcow2`.
-
-
-#### Commands
-
-###### `check`
-
-Checks the syntax of all `.just` files and the `Justfile`.
-
-###### `fix`
-
-Fixes the syntax of all `.just` files and the `Justfile`.
-
-###### `clean`
-
-Cleans the repository by removing build artifacts.
-
-##### Build Commands
-
-###### `build`
-
-Builds a container image using Podman.
-
-```bash
-just build $target_image $tag $dx $hwe $gdx
-```
-
-Arguments:
-- `$target_image`: The tag you want to apply to the image (default: aurora).
-- `$tag`: The tag for the image (default: lts).
-- `$dx`: Enable DX (default: "0").
-- `$hwe`: Enable HWE (default: "0").
-- `$gdx`: Enable GDX (default: "0").
-
-##### Building Virtual Machines and ISOs
-
-###### `build-qcow2`
-
-Builds a QCOW2 virtual machine image.
-
-```bash
-just build-qcow2 $target_image $tag
-```
-
-###### `build-raw`
-
-Builds a RAW virtual machine image.
-
-```bash
-just build-raw $target_image $tag
-```
-
-###### `build-iso`
-
-Builds an ISO virtual machine image.
-
-```bash
-just build-iso $target_image $tag
-```
-
-###### `rebuild-qcow2`
-
-Rebuilds a QCOW2 virtual machine image.
-
-```bash
-just rebuild-qcow2 $target_image $tag
-```
-
-###### `rebuild-raw`
-
-Rebuilds a RAW virtual machine image.
-
-```bash
-just rebuild-raw $target_image $tag
-```
-
-###### `rebuild-iso`
-
-Rebuilds an ISO virtual machine image.
-
-```bash
-just rebuild-iso $target_image $tag
-```
-
-##### Run Virtual Machines
-
-###### `run-vm-qcow2`
-
-Runs a virtual machine from a QCOW2 image.
-
-```bash
-just run-vm-qcow2 $target_image $tag
-```
-
-###### `run-vm-raw`
-
-Runs a virtual machine from a RAW image.
-
-```bash
-just run-vm-raw $target_image $tag
-```
-
-###### `run-vm-iso`
-
-Runs a virtual machine from an ISO.
-
-```bash
-just run-vm-iso $target_image $tag
-```
-
-###### `spawn-vm`
-
-Runs a virtual machine using systemd-vmspawn.
-
-```bash
-just spawn-vm rebuild="0" type="qcow2" ram="6G"
-```
-
-##### Lint and Format
-
-###### `lint`
-
-Runs shell check on all Bash scripts.
-
-###### `format`
-
-Runs shfmt on all Bash scripts.
-
-## Workflows
-
-### build.yml
-
-This workflow creates your custom OCI image and publishes it to the Github Container Registry (GHCR). By default, the image name will match the Github repository name.
-
-### build-iso.yml
-
-This workflow creates an ISO from your OCI image by utilizing the [bootc-image-builder](https://osbuild.org/docs/bootc/) to generate an ISO. In order to use this workflow you must complete the following steps:
-
-- Modify `iso.toml` to point to your custom image before generating an ISO.
-- If you changed your image name from the default in `build.yml` then in the `build-iso.yml` file edit the `IMAGE_REGISTRY` and `DEFAULT_TAG` environment variables with the correct values. If you did not make changes, skip this step.
-- Finally, if you want to upload your ISOs to S3 then you will need to add your S3 configuration to the repository's Action secrets. This can be found by going to your repository settings, under `Secrets and Variables` -> `Actions`. You will need to add the following
-  - `S3_PROVIDER` - Must match one of the values from the [supported list](https://rclone.org/s3/)
-  - `S3_BUCKET_NAME` - Your unique bucket name
-  - `S3_ACCESS_KEY_ID` - It is recommended that you make a separate key just for this workflow
-  - `S3_SECRET_ACCESS_KEY` - See above.
-  - `S3_REGION` - The region your bucket lives in. If you do not know then set this value to `auto`.
-  - `S3_ENDPOINT` - This value will be specific to the bucket as well.
-
-Once the workflow is done, you'll find it either in your S3 bucket or as part of the summary under `Artifacts` after the workflow is completed.
-
-#### Container Signing
-
-Container signing is important for end-user security and is enabled on all Universal Blue images. It is recommended you set this up, and by default the image builds *will fail* if you don't.
-
-This provides users a method of verifying the image.
-
-1. Install the [cosign CLI tool](https://edu.chainguard.dev/open-source/sigstore/cosign/how-to-install-cosign/#installing-cosign-with-the-cosign-binary)
-
-2. Run inside your repo folder:
-
-    ```bash
-    cosign generate-key-pair
-    ```
-
-    
-    - Do NOT put in a password when it asks you to, just press enter. The signing key will be used in GitHub Actions and will not work if it is encrypted.
-
-> [!WARNING]
-> Be careful to *never* accidentally commit `cosign.key` into your git repo.
-
-3. Add the private key to GitHub
-
-    - This can also be done manually. Go to your repository settings, under `Secrets and Variables` -> `Actions`
-    ![image](https://user-images.githubusercontent.com/1264109/216735595-0ecf1b66-b9ee-439e-87d7-c8cc43c2110a.png)
-    Add a new secret and name it `SIGNING_SECRET`, then paste the contents of `cosign.key` into the secret and save it. Make sure it's the .key file and not the .pub file. Once done, it should look like this:
-    ![image](https://user-images.githubusercontent.com/1264109/216735690-2d19271f-cee2-45ac-a039-23e6a4c16b34.png)
-
-    - (CLI instructions) If you have the `github-cli` installed, run:
-
-    ```bash
-    gh secret set SIGNING_SECRET < cosign.key
-    ```
-
-4. Commit the `cosign.pub` file to the root of your git repository.
-
-# Community
-
-- [**bootc discussion forums**](https://github.com/bootc-dev/bootc/discussions) - Nothing in this template is ublue specific, the upstream bootc project has a discussions forum where custom image builders can hang out and ask questions.
-
-## Artifacthub
-
-This template comes with the necessary tooling to index your image on [artifacthub.io](https://artifacthub.io), use the `artifacthub-repo.yml` file at the root to verify yourself as the publisher. This is important to you for a few reasons:
-
-- The value of artifacthub is it's one place for people to index their custom images, and since we depend on each other to learn, it helps grow the community. 
-- You get to see your pet project listed with the other cool projects in Cloud Native.
-- Since the site puts your README front and center, it's a good way to learn how to write a good README, learn some marketing, finding your audience, etc. 
-
-[Discussion thread](https://universal-blue.discourse.group/t/listing-your-custom-image-on-artifacthub/6446)
-
-## Community Examples
-
-- [m2os](https://github.com/m2giles/m2os)
-- [bos](https://github.com/bsherman/bos)
-- [homer](https://github.com/bketelsen/homer/)
