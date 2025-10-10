@@ -66,15 +66,17 @@ dnf5 -y install \
     iotop \
     p7zip \
     p7zip-plugins \
-    podmansh \
     powerline-fonts \
     sysprof \
     tiptop \
     ubuntu-family-fonts \
     osbuild-selinux \
     podman-bootc \
-    podman-compose
-    #podman-machine
+    podman-compose \
+    podmansh \
+    podman-machine
+    #podman-machine needed for podman-bootc extension (macadam)
+
     #docker-buildx-plugin \
     #docker-ce \
     #docker-ce-cli \
