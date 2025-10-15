@@ -37,6 +37,7 @@ dnf5 -y install \
     gnome-shell-extension-caffeine \
     gnome-shell-extension-search-light \
     gnome-shell-extension-blur-my-shell \
+    gnome-shell-extension-user-theme \
     gnome-backgrounds-extras \
     gnome-tweaks \
     starship \
