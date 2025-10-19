@@ -106,7 +106,7 @@ curl -L -o /usr/local/bin/macadam https://github.com/crc-org/macadam/releases/do
 chmod +x /usr/local/bin/macadam
 
 # Install dynamic wallpapers
-RUN curl -s "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/main/Easy_Install.sh" | bash
+curl -s "https://raw.githubusercontent.com/rpassmore/Linux_Dynamic_Wallpapers/main/Easy_Install.sh" | bash
 
 # Swap flatpak repos, this is done in a systemd unit for now
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
