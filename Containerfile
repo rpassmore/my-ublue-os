@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/ublue-os/silverblue-main:42
+ARG BASE_IMAGE=ghcr.io/ublue-os/silverblue-main:43@sha256:c1aac8e296320cb6204cd4b389c9df8700839d3c2d0b163b56e4b3dcaaef5be2
 
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
