@@ -28,7 +28,6 @@ dnf5 -y copr enable gmaglione/podman-bootc
 
 # this installs a package from fedora repos
 dnf5 -y install \
-    bazaar \
     bash-color-prompt \
     bootc \
     fastfetch \
