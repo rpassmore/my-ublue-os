@@ -64,7 +64,8 @@ install-system-flatpaks:
                                                     com.github.johnfactotum.Foliate \
                                                     com.discordapp.Discord \
                                                     org.videolan.VLC \
-                                                    org.gnome.Showtime
+                                                    org.gnome.Showtime \
+                                                    io.github.kolunmi.Bazaar
 
 # alias for install-jetbrains-toolbox
 [group('Apps')]
