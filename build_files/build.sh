@@ -31,6 +31,7 @@ dnf5 -y install \
     bash-color-prompt \
     bootc \
     fastfetch \
+    firewall-config \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
     gnome-shell-extension-caffeine \
