@@ -5,11 +5,10 @@
       branches:
         - main
     schedule:
-      - cron: '10 05 * * 4'  # 05:10am UTC every Thursday
+      - cron: '10 05 * * 5'  # 05:10am UTC every Friday
     push:
       branches:
         - main
-        - fedora-43
       paths-ignore:
         - '**/README.md'
     workflow_dispatch:
@@ -19,7 +18,7 @@
     IMAGE_DESC: "My Customized Universal Blue Image"
     IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
     ARTIFACTHUB_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4"  # You should put your own image here so that you get a fancy profile image on https://artifacthub.io/!
-    DEFAULT_TAG: 43
+    DEFAULT_TAG: latest
     FEDORA_VERSION: 43
   
   concurrency:
