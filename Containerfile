@@ -11,6 +11,9 @@ FROM ${BASE_IMAGE}
 ## make modifications desired in your image and install packages by modifying the build.sh script
 ## the following RUN directive does all the things required to run "build.sh" as recommended.
 
+# Copy Homebrew files from the brew image
+COPY --from=ghcr.io/projectbluefin/brew:latest /system_files /
+
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
