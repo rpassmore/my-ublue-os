@@ -35,7 +35,6 @@ dnf5 -y install \
     gnome-shell-extension-dash-to-dock \
     gnome-shell-extension-appindicator \
     gnome-shell-extension-caffeine \
-    gnome-shell-extension-search-light \
     gnome-shell-extension-blur-my-shell \
     gnome-backgrounds-extras \
     gnome-tweaks \
